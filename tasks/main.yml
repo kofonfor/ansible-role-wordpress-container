@@ -1,0 +1,28 @@
+- name: create ext volume for /var/lock
+  file: state=directory path={{ ext_wordpress_varlock_volume }}
+
+- name: create ext volume for /var/www/html
+  file: state=directory path={{ ext_wordpress_varwwwhtml_volume }}
+
+- name: start a Wordpress container
+  docker_container:
+    name: wordpress
+    image: wordpress
+    state: started
+    recreate: yes
+    restart_policy: always
+    #read_only: yes
+    exposed_ports:
+      - 80
+    ports:
+      - "80:80"
+    volumes:
+      - "{{ ext_wordpress_varlock_volume }}:/run/lock"
+      - "{{ ext_wordpress_varwwwhtml_volume }}:/var/www/html"
+        #  - "{{ ext_mysql_tmp_volume }}:/tmp"
+        #  - "{{ ext_mysql_varrun_volume }}:/run/mysqld"
+    env:
+      WORDPRESS_DB_HOST: "{{ docker_wordpress_db_host }}"
+      WORDPRESS_DB_USER: "{{ docker_wordpress_db_user }}"
+      WORDPRESS_DB_PASSWORD: "{{ docker_wordpress_db_password }}"
+      WORDPRESS_DB_NAME: "{{ docker_wordpress_db_name }}"

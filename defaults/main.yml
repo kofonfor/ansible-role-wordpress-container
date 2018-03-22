@@ -1,0 +1,2 @@
+ext_wordpress_varlock_volume: /var/lib/docker-extvols/wordpress/varlock
+ext_wordpress_varwwwhtml_volume: /var/lib/docker-extvols/wordpress/varwwwhtml
